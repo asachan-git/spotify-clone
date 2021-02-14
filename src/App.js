@@ -46,12 +46,7 @@ function App() {
       // })
       // .catch(err => console.log("error", err))
 
-      spotify.getMe(
-      //   {
-      //   Authorization: `Bearer ${_token}`, 
-      //   json: true
-      // }
-      )
+      spotify.getMe()
       .then((_user) => {
         dispatch({
           type: "SET_USER",
@@ -64,6 +59,13 @@ function App() {
         dispatch({
           type: "SET_PLAYLISTS",
           playlists: playlists,
+        });
+      });
+
+      spotify.getPlaylist('01zLAJQonxiGmyozzVtCeE').then(response => {
+        dispatch({
+          type: "SET_DISCOVER_WEEKLY",
+          discover_weekly: response
         })
       })
     }
