@@ -10,27 +10,56 @@ import {useDataLayerValue} from "./DataLayer"
 const spotify = new SpotifyWebApi();
 
 function App() {
-  const [{ user, token }, dispatch] = useDataLayerValue();
+  const [{ token }, dispatch] = useDataLayerValue();
+
+  // const getUserData = async(token) => {
+  //   const settings = {
+  //     headers: {'Authorization': 'Bearer ' + token}
+  //   }
+  //   const response = await fetch('https://api.spotify.com/v1/me', settings);
+  //   const data = await response.json()
+  //   return data;
+  // }
 
   useEffect(() => {
     const hash = getTokenFromUrl();
     window.location.hash = "";
-    const _token = hash.access_token;
+    const _token = hash.access_token; 
 
     if(_token) {
-      console.log(_token)
+      spotify.setAccessToken(_token)
+
       dispatch ({
         type: "SET_TOKEN",
         token: _token
-      })
-      spotify.setAccessToken(_token);  
+      });
 
-      spotify.getMe().then((user) => {
+      console.log("Token", token)
+
+      // getUserData(_token)
+      // .then((_user) => {
+      //   console.log("User", _user)
+      //   dispatch({
+      //     type: "SET_USER",
+      //     user: _user,
+      //   });
+      // })
+      // .catch(err => console.log("error", err))
+
+      spotify.getMe(
+      //   {
+      //   Authorization: `Bearer ${_token}`, 
+      //   json: true
+      // }
+      )
+      .then((_user) => {
         dispatch({
           type: "SET_USER",
-          user: user,
-        })
+          user: _user,
+        });
       })
+      .catch(err => console.log(err));
+
       spotify.getUserPlaylists().then((playlists) => {
         dispatch({
           type: "SET_PLAYLISTS",
@@ -38,7 +67,7 @@ function App() {
         })
       })
     }
-  }, []);
+  }, [token]);
 
 
 

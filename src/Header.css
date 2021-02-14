@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: center;
     color: white;
+    margin-bottom: 30px;
 }
 
 .header__left {
@@ -30,7 +31,6 @@
 .header__right {
     display: flex;
     align-items: center;
-    color: white;
 }
 
 .header__right > h4 {
